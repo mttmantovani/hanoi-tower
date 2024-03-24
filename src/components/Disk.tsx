@@ -38,6 +38,7 @@ const Disk: FC<{ id: string; size: number; disabled?: boolean }> = ({
           ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
           : undefined,
         transition: "opacity 0.2s ease",
+        touchAction: "none",
       }}
       {...listeners}
       {...attributes}

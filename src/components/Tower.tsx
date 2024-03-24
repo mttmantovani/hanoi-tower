@@ -24,6 +24,8 @@ const Tower: FC<PropsWithChildren<TowerProps>> = ({ id, disks }) => {
         width: "250px",
         minHeight: "250px",
         margin: "0 10px",
+        WebkitUserSelect: "none" /* Safari */,
+        userSelect: "none",
       }}
     >
       {disks.map((size, index) => (
