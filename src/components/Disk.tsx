@@ -1,6 +1,17 @@
 import { useDraggable } from "@dnd-kit/core";
 import { FC } from "react";
 
+const colors = [
+  "blue",
+  "green",
+  "DarkTurquoise",
+  "brown",
+  "red",
+  "gray",
+  "coral",
+  "khaki",
+];
+
 const Disk: FC<{ id: string; size: number; disabled?: boolean }> = ({
   id,
   size,
@@ -16,10 +27,11 @@ const Disk: FC<{ id: string; size: number; disabled?: boolean }> = ({
     <div
       ref={setNodeRef}
       style={{
-        width: `${size * 20}px`,
+        width: `${size * 30}px`,
         height: "20px",
-        backgroundColor: "blue",
-        margin: "5px auto",
+        backgroundColor: colors[size - 1],
+        borderRadius: "25px",
+        margin: "0 auto",
         cursor: disabled ? "auto" : isDragging ? "grabbing" : "grab",
         opacity: isDragging ? 0.5 : 1,
         transform: transform

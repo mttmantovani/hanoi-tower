@@ -19,9 +19,9 @@ const Tower: FC<PropsWithChildren<TowerProps>> = ({ id, disks }) => {
         display: "flex",
         flexDirection: "column-reverse",
         justifyContent: "flex-start",
-        background: isOver ? "green" : undefined,
+        background: isOver ? "Aquamarine" : undefined,
         border: "2px solid black",
-        width: "180px",
+        width: "250px",
         minHeight: "250px",
         margin: "0 10px",
       }}

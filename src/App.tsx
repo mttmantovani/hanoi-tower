@@ -1,10 +1,27 @@
-import { useState, FC } from "react";
+import { useState, useMemo, FC, useEffect } from "react";
 import Tower from "./components/Tower";
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogActions from "@mui/material/DialogActions";
+import {
+  Button,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
+import "./App.css";
 
 const App: FC = () => {
   const [numberOfMoves, setNumberOfMoves] = useState(0);
   const [numberOfDisks, setNumberOfDisks] = useState(3);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const finalState = useMemo(
+    () => [...Array(numberOfDisks).keys()].map((i) => i + 1).reverse(),
+    [numberOfDisks]
+  );
 
   const [towers, setTowers] = useState([
     {
@@ -15,7 +32,22 @@ const App: FC = () => {
     { id: "tower-3", disks: [] },
   ]);
 
-  const handleChangeDisks = (numberOfDisks: number) => {
+  useEffect(() => {
+    if (
+      towers.find(
+        (tower) =>
+          tower.id === "tower-3" &&
+          tower.disks.length === finalState.length &&
+          tower.disks.every((value, index) => value === finalState[index])
+      )
+    ) {
+      setDialogOpen(true);
+    }
+  }, [towers, finalState]);
+
+  const handleDiskNumberChange = (event: SelectChangeEvent) => {
+    const numberOfDisks = parseInt(event.target.value);
+
     setNumberOfDisks(numberOfDisks);
     setTowers([
       {
@@ -41,7 +73,7 @@ const App: FC = () => {
     setNumberOfMoves(0);
   };
 
-  const handleDragEnd = (event) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (!active || !over) {
@@ -49,7 +81,7 @@ const App: FC = () => {
     }
 
     // Assuming the id of the active disk is in the format 'disk-<size>'
-    const activeDiskSize = parseInt(active.id.split("-")[1], 10);
+    const activeDiskSize = parseInt(active.id.toString().split("-")[1], 10);
 
     // Find the source and target towers
     const sourceTower = towers.find((tower) =>
@@ -64,7 +96,7 @@ const App: FC = () => {
     // Check if the move is valid
     if (
       targetTower.disks.length === 0 ||
-      activeDiskSize < targetTower.disks[0]
+      activeDiskSize < targetTower.disks[targetTower.disks.length - 1]
     ) {
       // Remove the disk from the source tower
       const updatedSourceTower = {
@@ -93,11 +125,49 @@ const App: FC = () => {
     }
   };
 
+  const handleReplay = () => {
+    setDialogOpen(false);
+    setTowers([
+      {
+        id: "tower-1",
+        disks: [...Array(numberOfDisks).keys()].map((i) => i + 1).reverse(),
+      },
+      { id: "tower-2", disks: [] },
+      { id: "tower-3", disks: [] },
+    ]);
+    setNumberOfMoves(0);
+  };
+
   return (
     <>
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <h1>Hanoi Tower Game</h1>
+        <h1>Tower of Hanoi</h1>
       </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "baseline",
+        }}
+      >
+        <Button onClick={handleReset} variant="outlined">
+          Reset
+        </Button>
+        <InputLabel id="demo-simple-select-label">Number of disks: </InputLabel>
+        <Select
+          label="Number of disks"
+          value={numberOfDisks.toString()}
+          onChange={handleDiskNumberChange}
+        >
+          <MenuItem value="3">3</MenuItem>
+          <MenuItem value="4">4</MenuItem>
+          <MenuItem value="5">5</MenuItem>
+          <MenuItem value="6">6</MenuItem>
+          <MenuItem value="7">7</MenuItem>
+          <MenuItem value="8">8</MenuItem>
+        </Select>
+      </div>
+
       <DndContext onDragEnd={handleDragEnd}>
         <div style={{ display: "flex", justifyContent: "center" }}>
           {towers.map((tower) => (
@@ -105,23 +175,31 @@ const App: FC = () => {
           ))}
         </div>
       </DndContext>
-      <div>
-        <button onClick={handleReset}>Reset</button>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "baseline",
+        }}
+      >
+        Number of moves: {numberOfMoves}
       </div>
-      <div>
-        <label>
-          Number of Disks:{" "}
-          <select onChange={(e) => handleChangeDisks(parseInt(e.target.value))}>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-          </select>
-        </label>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "baseline",
+        }}
+      >
+        Minimum number of moves: {2 ** numberOfDisks - 1}
       </div>
-      <div>Number of moves: {numberOfMoves}</div>
+      <Dialog open={dialogOpen}>
+        <DialogTitle>You won!</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleReplay}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
