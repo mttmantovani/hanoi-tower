@@ -1,4 +1,4 @@
-import { useState, useMemo, FC, useEffect } from "react";
+import { useState, useMemo, FC, useEffect, useContext } from "react";
 import Tower from "./components/Tower";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import Dialog from "@mui/material/Dialog";
@@ -12,8 +12,29 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import "./App.css";
+import { ThemeContext } from "./context/ThemeContext";
+import { DarkModeToggle } from "./components/DarkModeToggle";
+import {
+  createTheme,
+  ThemeProvider as MuiThemeProvider,
+} from "@mui/material/styles";
 
 const App: FC = () => {
+  const { theme } = useContext(ThemeContext);
+
+  const muiTheme = useMemo(
+    () =>
+      createTheme({
+        typography: {
+          fontFamily: ["Exo 2", "Arial", "sans-serif"].join(","),
+        },
+        palette: {
+          mode: theme,
+        },
+      }),
+    [theme]
+  );
+
   const [numberOfMoves, setNumberOfMoves] = useState(0);
   const [numberOfDisks, setNumberOfDisks] = useState(3);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -139,68 +160,74 @@ const App: FC = () => {
   };
 
   return (
-    <>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <h1>Tower of Hanoi</h1>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "baseline",
-        }}
-      >
-        <Button onClick={handleReset} variant="outlined">
-          Reset
-        </Button>
-        <InputLabel id="demo-simple-select-label">Number of disks: </InputLabel>
-        <Select
-          label="Number of disks"
-          value={numberOfDisks.toString()}
-          onChange={handleDiskNumberChange}
-        >
-          <MenuItem value="3">3</MenuItem>
-          <MenuItem value="4">4</MenuItem>
-          <MenuItem value="5">5</MenuItem>
-          <MenuItem value="6">6</MenuItem>
-          <MenuItem value="7">7</MenuItem>
-          <MenuItem value="8">8</MenuItem>
-        </Select>
-      </div>
+    <MuiThemeProvider theme={muiTheme}>
+      <div className={`theme ${theme}`}>
+        <div>
+          <nav>
+            <h1>Tower of Hanoi</h1>
+            <DarkModeToggle />
+          </nav>
 
-      <DndContext onDragEnd={handleDragEnd}>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          {towers.map((tower) => (
-            <Tower key={tower.id} id={tower.id} disks={tower.disks} />
-          ))}
+          <div>
+            <div id="settings">
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "baseline",
+                  justifyContent: "space-between",
+                }}
+              >
+                <InputLabel
+                  id="number-of-disks-select"
+                  sx={{ marginRight: "10px" }}
+                >
+                  Number of disks:{" "}
+                </InputLabel>
+                <Select
+                  label="Number of disks"
+                  value={numberOfDisks.toString()}
+                  onChange={handleDiskNumberChange}
+                >
+                  <MenuItem value="3">3</MenuItem>
+                  <MenuItem value="4">4</MenuItem>
+                  <MenuItem value="5">5</MenuItem>
+                  <MenuItem value="6">6</MenuItem>
+                  <MenuItem value="7">7</MenuItem>
+                  <MenuItem value="8">8</MenuItem>
+                </Select>
+              </div>
+              <Button
+                sx={{ marginTop: "1em" }}
+                onClick={handleReset}
+                variant="contained"
+              >
+                Reset
+              </Button>
+            </div>
+
+            <DndContext onDragEnd={handleDragEnd}>
+              <div id="tower">
+                {towers.map((tower) => (
+                  <Tower key={tower.id} id={tower.id} disks={tower.disks} />
+                ))}
+              </div>
+            </DndContext>
+
+            <div className="info">Number of moves: {numberOfMoves}</div>
+            <div className="info">
+              Minimum number of moves: {2 ** numberOfDisks - 1}
+            </div>
+          </div>
+
+          <Dialog open={dialogOpen}>
+            <DialogTitle>You won in {numberOfMoves} moves!</DialogTitle>
+            <DialogActions>
+              <Button onClick={handleReplay}>Close</Button>
+            </DialogActions>
+          </Dialog>
         </div>
-      </DndContext>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "baseline",
-        }}
-      >
-        Number of moves: {numberOfMoves}
       </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "baseline",
-        }}
-      >
-        Minimum number of moves: {2 ** numberOfDisks - 1}
-      </div>
-      <Dialog open={dialogOpen}>
-        <DialogTitle>You won!</DialogTitle>
-        <DialogActions>
-          <Button onClick={handleReplay}>Close</Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    </MuiThemeProvider>
   );
 };
 
