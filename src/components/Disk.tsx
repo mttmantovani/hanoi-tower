@@ -1,6 +1,7 @@
 import { useDraggable } from "@dnd-kit/core";
 import { blue } from "@mui/material/colors";
 import { FC, useContext } from "react";
+import { NumberOfDisksContext } from "../context/NumberOfDisksContext";
 import { ThemeContext } from "../context/ThemeContext";
 
 interface DiskProps {
@@ -17,15 +18,20 @@ const Disk: FC<DiskProps> = ({ id, size, disabled }) => {
     });
 
   const { theme } = useContext(ThemeContext);
-
   const haloColor = theme === "dark" ? "#B8CC37" : "#6D723C";
+
+  const { numberOfDisks } = useContext(NumberOfDisksContext);
+  const maxWidth = 100;
+  const minWidth = 40;
+  const diskWidth =
+    ((size - 1) * (maxWidth - minWidth)) / (numberOfDisks - 1) + minWidth;
 
   return (
     <div
       ref={setNodeRef}
       id={id}
       style={{
-        width: `${size * 30}px`,
+        width: `${diskWidth}px`,
         height: "20px",
         backgroundColor: blue[(size * 100) as keyof typeof blue],
         borderRadius: "25px",

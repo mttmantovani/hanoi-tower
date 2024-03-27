@@ -15,11 +15,13 @@ import "./App.css";
 import { DarkModeToggle } from "./components/DarkModeToggle";
 import EndgameDialog from "./components/EndgameDialog";
 import Tower from "./components/Tower";
+import { NumberOfDisksContext } from "./context/NumberOfDisksContext";
 import { ThemeContext } from "./context/ThemeContext";
-import { useNumberOfDisks } from "./hooks/useNumberOfDisks";
 
 const App: FC = () => {
   const { theme } = useContext(ThemeContext);
+  const { numberOfDisks, updateNumberOfDisks } =
+    useContext(NumberOfDisksContext);
 
   const muiTheme = useMemo(
     () =>
@@ -35,7 +37,6 @@ const App: FC = () => {
   );
 
   const [numberOfMoves, setNumberOfMoves] = useState(0);
-  const { numberOfDisks, setNumberOfDisks } = useNumberOfDisks();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const finalState = useMemo(
@@ -66,13 +67,15 @@ const App: FC = () => {
   }, [towers, finalState]);
 
   const handleDiskNumberChange = (event: SelectChangeEvent) => {
-    const numberOfDisks = parseInt(event.target.value);
+    const updatedNumberOfDisks = parseInt(event.target.value);
 
-    setNumberOfDisks(numberOfDisks);
+    updateNumberOfDisks(updatedNumberOfDisks);
     setTowers([
       {
         id: "tower-1",
-        disks: [...Array(numberOfDisks).keys()].map((i) => i + 1).reverse(),
+        disks: [...Array(updatedNumberOfDisks).keys()]
+          .map((i) => i + 1)
+          .reverse(),
       },
       { id: "tower-2", disks: [] },
       { id: "tower-3", disks: [] },
