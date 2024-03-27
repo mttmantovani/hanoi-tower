@@ -1,22 +1,14 @@
 import { useDraggable } from "@dnd-kit/core";
+import { blue } from "@mui/material/colors";
 import { FC } from "react";
 
-const colors = [
-  "blue",
-  "green",
-  "DarkTurquoise",
-  "brown",
-  "red",
-  "gray",
-  "coral",
-  "khaki",
-];
+interface DiskProps {
+  id: string;
+  size: number;
+  disabled?: boolean;
+}
 
-const Disk: FC<{ id: string; size: number; disabled?: boolean }> = ({
-  id,
-  size,
-  disabled,
-}) => {
+const Disk: FC<DiskProps> = ({ id, size, disabled }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id,
@@ -26,10 +18,11 @@ const Disk: FC<{ id: string; size: number; disabled?: boolean }> = ({
   return (
     <div
       ref={setNodeRef}
+      id={id}
       style={{
         width: `${size * 30}px`,
         height: "20px",
-        backgroundColor: colors[size - 1],
+        backgroundColor: blue[(size * 100) as keyof typeof blue],
         borderRadius: "25px",
         margin: "0 auto",
         cursor: disabled ? "auto" : isDragging ? "grabbing" : "grab",

@@ -18,6 +18,7 @@ import {
   createTheme,
   ThemeProvider as MuiThemeProvider,
 } from "@mui/material/styles";
+import { useNumberOfDisks } from "./hooks/useNumberOfDisks";
 
 const App: FC = () => {
   const { theme } = useContext(ThemeContext);
@@ -36,7 +37,7 @@ const App: FC = () => {
   );
 
   const [numberOfMoves, setNumberOfMoves] = useState(0);
-  const [numberOfDisks, setNumberOfDisks] = useState(3);
+  const { numberOfDisks, setNumberOfDisks } = useNumberOfDisks();
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const finalState = useMemo(
@@ -101,10 +102,8 @@ const App: FC = () => {
       return;
     }
 
-    // Assuming the id of the active disk is in the format 'disk-<size>'
     const activeDiskSize = parseInt(active.id.toString().split("-")[1], 10);
 
-    // Find the source and target towers
     const sourceTower = towers.find((tower) =>
       tower.disks.includes(activeDiskSize)
     );
@@ -114,24 +113,20 @@ const App: FC = () => {
       return;
     }
 
-    // Check if the move is valid
     if (
       targetTower.disks.length === 0 ||
       activeDiskSize < targetTower.disks[targetTower.disks.length - 1]
     ) {
-      // Remove the disk from the source tower
       const updatedSourceTower = {
         ...sourceTower,
         disks: sourceTower.disks.filter((disk) => disk !== activeDiskSize),
       };
 
-      // Add the disk to the target tower
       const updatedTargetTower = {
         ...targetTower,
         disks: [...targetTower.disks, activeDiskSize],
       };
 
-      // Update the game state
       setTowers(
         towers.map((tower) =>
           tower.id === sourceTower.id
