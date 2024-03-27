@@ -1,9 +1,4 @@
-import { useState, useMemo, FC, useEffect, useContext } from "react";
-import Tower from "./components/Tower";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogActions from "@mui/material/DialogActions";
 import {
   Button,
   InputLabel,
@@ -11,13 +6,16 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import "./App.css";
-import { ThemeContext } from "./context/ThemeContext";
-import { DarkModeToggle } from "./components/DarkModeToggle";
 import {
-  createTheme,
   ThemeProvider as MuiThemeProvider,
+  createTheme,
 } from "@mui/material/styles";
+import { FC, useContext, useEffect, useMemo, useState } from "react";
+import "./App.css";
+import { DarkModeToggle } from "./components/DarkModeToggle";
+import EndgameDialog from "./components/EndgameDialog";
+import Tower from "./components/Tower";
+import { ThemeContext } from "./context/ThemeContext";
 import { useNumberOfDisks } from "./hooks/useNumberOfDisks";
 
 const App: FC = () => {
@@ -38,7 +36,7 @@ const App: FC = () => {
 
   const [numberOfMoves, setNumberOfMoves] = useState(0);
   const { numberOfDisks, setNumberOfDisks } = useNumberOfDisks();
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const finalState = useMemo(
     () => [...Array(numberOfDisks).keys()].map((i) => i + 1).reverse(),
@@ -63,7 +61,7 @@ const App: FC = () => {
           tower.disks.every((value, index) => value === finalState[index])
       )
     ) {
-      setDialogOpen(true);
+      setIsDialogOpen(true);
     }
   }, [towers, finalState]);
 
@@ -142,7 +140,7 @@ const App: FC = () => {
   };
 
   const handleReplay = () => {
-    setDialogOpen(false);
+    setIsDialogOpen(false);
     setTowers([
       {
         id: "tower-1",
@@ -214,12 +212,11 @@ const App: FC = () => {
             </div>
           </div>
 
-          <Dialog open={dialogOpen}>
-            <DialogTitle>You won in {numberOfMoves} moves!</DialogTitle>
-            <DialogActions>
-              <Button onClick={handleReplay}>Close</Button>
-            </DialogActions>
-          </Dialog>
+          <EndgameDialog
+            open={isDialogOpen}
+            numberOfMoves={numberOfMoves}
+            onClick={handleReplay}
+          />
         </div>
       </div>
     </MuiThemeProvider>
