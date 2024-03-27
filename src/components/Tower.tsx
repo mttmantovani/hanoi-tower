@@ -1,5 +1,6 @@
 import { useDroppable } from "@dnd-kit/core";
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren, useContext } from "react";
+import { ThemeContext } from "../context/ThemeContext";
 import Disk from "./Disk";
 
 interface TowerProps {
@@ -8,9 +9,16 @@ interface TowerProps {
 }
 
 const Tower: FC<PropsWithChildren<TowerProps>> = ({ id, disks }) => {
-  const { isOver, setNodeRef } = useDroppable({
+  const { active, isOver, setNodeRef } = useDroppable({
     id,
   });
+
+  const { theme } = useContext(ThemeContext);
+  const activeDiskSize = active
+    ? parseInt(active.id.toString().split("-")[1], 10)
+    : undefined;
+
+  const haloColor = theme === "dark" ? "#B8CC37" : "#6D723C";
 
   return (
     <div
@@ -19,11 +27,17 @@ const Tower: FC<PropsWithChildren<TowerProps>> = ({ id, disks }) => {
         display: "flex",
         flexDirection: "column-reverse",
         justifyContent: "flex-start",
-        background: isOver ? "Aquamarine" : undefined,
         border: "2px solid black",
+        boxShadow:
+          activeDiskSize !== undefined &&
+          isOver &&
+          !disks.includes(activeDiskSize)
+            ? `0 0 20px 5px ${haloColor}`
+            : undefined,
         width: "250px",
         minHeight: "250px",
         margin: "0 10px",
+
         WebkitUserSelect: "none" /* Safari */,
         userSelect: "none",
       }}

@@ -1,6 +1,7 @@
 import { useDraggable } from "@dnd-kit/core";
 import { blue } from "@mui/material/colors";
-import { FC } from "react";
+import { FC, useContext } from "react";
+import { ThemeContext } from "../context/ThemeContext";
 
 interface DiskProps {
   id: string;
@@ -14,6 +15,10 @@ const Disk: FC<DiskProps> = ({ id, size, disabled }) => {
       id,
       disabled,
     });
+
+  const { theme } = useContext(ThemeContext);
+
+  const haloColor = theme === "dark" ? "#B8CC37" : "#6D723C";
 
   return (
     <div
@@ -30,8 +35,9 @@ const Disk: FC<DiskProps> = ({ id, size, disabled }) => {
         transform: transform
           ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
           : undefined,
-        transition: "opacity 0.2s ease",
+        transition: "opacity 0.5s ease",
         touchAction: "none",
+        boxShadow: disabled ? undefined : `0 0 20px 5px ${haloColor}`,
       }}
       {...listeners}
       {...attributes}
