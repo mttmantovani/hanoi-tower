@@ -1,9 +1,4 @@
-import { useState, useMemo, FC, useEffect, useContext } from "react";
-import Tower from "./components/Tower";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogActions from "@mui/material/DialogActions";
 import {
   Button,
   InputLabel,
@@ -11,16 +6,22 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import "./App.css";
-import { ThemeContext } from "./context/ThemeContext";
-import { DarkModeToggle } from "./components/DarkModeToggle";
 import {
-  createTheme,
   ThemeProvider as MuiThemeProvider,
+  createTheme,
 } from "@mui/material/styles";
+import { FC, useContext, useEffect, useMemo, useState } from "react";
+import "./App.css";
+import { DarkModeToggle } from "./components/DarkModeToggle";
+import EndgameDialog from "./components/EndgameDialog";
+import Tower from "./components/Tower";
+import { NumberOfDisksContext } from "./context/NumberOfDisksContext";
+import { ThemeContext } from "./context/ThemeContext";
 
 const App: FC = () => {
   const { theme } = useContext(ThemeContext);
+  const { numberOfDisks, updateNumberOfDisks } =
+    useContext(NumberOfDisksContext);
 
   const muiTheme = useMemo(
     () =>
@@ -36,8 +37,7 @@ const App: FC = () => {
   );
 
   const [numberOfMoves, setNumberOfMoves] = useState(0);
-  const [numberOfDisks, setNumberOfDisks] = useState(3);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const finalState = useMemo(
     () => [...Array(numberOfDisks).keys()].map((i) => i + 1).reverse(),
@@ -62,18 +62,20 @@ const App: FC = () => {
           tower.disks.every((value, index) => value === finalState[index])
       )
     ) {
-      setDialogOpen(true);
+      setIsDialogOpen(true);
     }
   }, [towers, finalState]);
 
   const handleDiskNumberChange = (event: SelectChangeEvent) => {
-    const numberOfDisks = parseInt(event.target.value);
+    const updatedNumberOfDisks = parseInt(event.target.value);
 
-    setNumberOfDisks(numberOfDisks);
+    updateNumberOfDisks(updatedNumberOfDisks);
     setTowers([
       {
         id: "tower-1",
-        disks: [...Array(numberOfDisks).keys()].map((i) => i + 1).reverse(),
+        disks: [...Array(updatedNumberOfDisks).keys()]
+          .map((i) => i + 1)
+          .reverse(),
       },
       { id: "tower-2", disks: [] },
       { id: "tower-3", disks: [] },
@@ -101,10 +103,8 @@ const App: FC = () => {
       return;
     }
 
-    // Assuming the id of the active disk is in the format 'disk-<size>'
     const activeDiskSize = parseInt(active.id.toString().split("-")[1], 10);
 
-    // Find the source and target towers
     const sourceTower = towers.find((tower) =>
       tower.disks.includes(activeDiskSize)
     );
@@ -114,24 +114,20 @@ const App: FC = () => {
       return;
     }
 
-    // Check if the move is valid
     if (
       targetTower.disks.length === 0 ||
       activeDiskSize < targetTower.disks[targetTower.disks.length - 1]
     ) {
-      // Remove the disk from the source tower
       const updatedSourceTower = {
         ...sourceTower,
         disks: sourceTower.disks.filter((disk) => disk !== activeDiskSize),
       };
 
-      // Add the disk to the target tower
       const updatedTargetTower = {
         ...targetTower,
         disks: [...targetTower.disks, activeDiskSize],
       };
 
-      // Update the game state
       setTowers(
         towers.map((tower) =>
           tower.id === sourceTower.id
@@ -147,7 +143,7 @@ const App: FC = () => {
   };
 
   const handleReplay = () => {
-    setDialogOpen(false);
+    setIsDialogOpen(false);
     setTowers([
       {
         id: "tower-1",
@@ -219,12 +215,11 @@ const App: FC = () => {
             </div>
           </div>
 
-          <Dialog open={dialogOpen}>
-            <DialogTitle>You won in {numberOfMoves} moves!</DialogTitle>
-            <DialogActions>
-              <Button onClick={handleReplay}>Close</Button>
-            </DialogActions>
-          </Dialog>
+          <EndgameDialog
+            open={isDialogOpen}
+            numberOfMoves={numberOfMoves}
+            onClick={handleReplay}
+          />
         </div>
       </div>
     </MuiThemeProvider>
