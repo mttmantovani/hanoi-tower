@@ -8,9 +8,9 @@ const Solution: FC = () => {
   const listOfMoves = towerOfHanoi(numberOfDisks);
 
   return (
-    <ol style={{ whiteSpace: "nowrap" }}>
+    <ol>
       {listOfMoves.map((move, index) => (
-        <li key={index}>
+        <li key={index} style={{ paddingLeft: "1em" }}>
           <>
             {move[0]} &rarr; {move[5]}
           </>

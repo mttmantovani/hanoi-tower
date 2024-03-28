@@ -63,7 +63,7 @@ const App: FC = () => {
     if (
       towers.find(
         (tower) =>
-          tower.id === "tower-3" &&
+          (tower.id === "tower-2" || tower.id === "tower-3") &&
           tower.disks.length === finalState.length &&
           tower.disks.every((value, index) => value === finalState[index])
       )
@@ -168,13 +168,27 @@ const App: FC = () => {
   return (
     <MuiThemeProvider theme={muiTheme}>
       <div className={`theme ${theme}`}>
-        <div style={{ minWidth: "200px" }}>
+        <div style={{ minWidth: "200px", maxWidth: "520px" }}>
           <nav>
             <h1>Tower of Hanoi</h1>
             <DarkModeToggle />
           </nav>
 
           <div>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                Rules
+              </AccordionSummary>
+              <AccordionDetails>
+                Reconstruct the entire stack of disks on one of the other rods,
+                with the following rules:
+                <ul>
+                  <li>You can only move one disk at a time</li>
+                  <li>You cannot place a disk on top of a smaller disk</li>
+                </ul>
+              </AccordionDetails>
+            </Accordion>
+
             <div id="settings">
               <div
                 style={{
@@ -270,7 +284,7 @@ const App: FC = () => {
 
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                Show solution
+                Solution
               </AccordionSummary>
               <AccordionDetails>
                 <Solution />

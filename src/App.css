@@ -1,7 +1,11 @@
 html,
 body {
   font-family: "Exo 2";
-  font-size: large;
+
+  @media (min-width: 500px) {
+    font-size: large;
+  }
+
   margin: auto;
 }
 
