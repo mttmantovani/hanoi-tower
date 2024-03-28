@@ -19,7 +19,7 @@ import { NumberOfDisksContext } from "./context/NumberOfDisksContext";
 import { ThemeContext } from "./context/ThemeContext";
 
 const App: FC = () => {
-  const { theme } = useContext(ThemeContext);
+  const { theme, diskPalette, toggleDiskPalette } = useContext(ThemeContext);
   const { numberOfDisks, updateNumberOfDisks } =
     useContext(NumberOfDisksContext);
 
@@ -31,6 +31,7 @@ const App: FC = () => {
         },
         palette: {
           mode: theme,
+          tonalOffset: 0.5,
         },
       }),
     [theme]
@@ -155,10 +156,14 @@ const App: FC = () => {
     setNumberOfMoves(0);
   };
 
+  const onPaletteChange = (event: SelectChangeEvent) => {
+    toggleDiskPalette(event.target.value as "blue" | "red");
+  };
+
   return (
     <MuiThemeProvider theme={muiTheme}>
       <div className={`theme ${theme}`}>
-        <div>
+        <div style={{ minWidth: "200px" }}>
           <nav>
             <h1>Tower of Hanoi</h1>
             <DarkModeToggle />
@@ -171,6 +176,7 @@ const App: FC = () => {
                   display: "flex",
                   alignItems: "baseline",
                   justifyContent: "space-between",
+                  margin: "1em",
                 }}
               >
                 <InputLabel
@@ -192,26 +198,69 @@ const App: FC = () => {
                   <MenuItem value="8">8</MenuItem>
                 </Select>
               </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "baseline",
+                  justifyContent: "space-between",
+                }}
+              >
+                <InputLabel
+                  id="disk-palette-select"
+                  sx={{ marginRight: "10px" }}
+                >
+                  Palette:{" "}
+                </InputLabel>
+                <Select
+                  label="Palette"
+                  value={diskPalette}
+                  onChange={onPaletteChange}
+                >
+                  <MenuItem value="blue">Blue</MenuItem>
+                  <MenuItem value="red">Red</MenuItem>
+                </Select>
+              </div>
+            </div>
+
+            <div style={{ margin: "1em 1em 2em" }}>
+              <DndContext onDragEnd={handleDragEnd}>
+                <div id="tower">
+                  {towers.map((tower) => (
+                    <Tower key={tower.id} id={tower.id} disks={tower.disks} />
+                  ))}
+                </div>
+              </DndContext>
+              <div
+                style={{
+                  height: "20px",
+                  border: "none",
+                  borderRadius: "20px",
+                  background:
+                    "linear-gradient(90deg, rgba(74,60,38,1) 0%, rgba(139,110,53,1) 75%, rgba(255,249,227,1) 100%)",
+                }}
+              ></div>
+            </div>
+
+            <div
+              style={{
+                margin: "0 2em",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
               <Button
-                sx={{ marginTop: "1em" }}
+                sx={{ marginRight: "1em" }}
                 onClick={handleReset}
                 variant="contained"
               >
                 Reset
               </Button>
-            </div>
-
-            <DndContext onDragEnd={handleDragEnd}>
-              <div id="tower">
-                {towers.map((tower) => (
-                  <Tower key={tower.id} id={tower.id} disks={tower.disks} />
-                ))}
+              <div>
+                <div className="info">Number of moves: {numberOfMoves}</div>
+                <div className="info">
+                  Minimum number of moves: {2 ** numberOfDisks - 1}
+                </div>
               </div>
-            </DndContext>
-
-            <div className="info">Number of moves: {numberOfMoves}</div>
-            <div className="info">
-              Minimum number of moves: {2 ** numberOfDisks - 1}
             </div>
           </div>
 
