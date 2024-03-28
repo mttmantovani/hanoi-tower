@@ -1,10 +1,13 @@
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { faReact } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Button,
+  CssBaseline,
   InputLabel,
   MenuItem,
   Select,
@@ -167,6 +170,7 @@ const App: FC = () => {
 
   return (
     <MuiThemeProvider theme={muiTheme}>
+      <CssBaseline />
       <div className={`theme ${theme}`}>
         <div style={{ minWidth: "200px", maxWidth: "520px" }}>
           <nav>
@@ -290,6 +294,12 @@ const App: FC = () => {
                 <Solution />
               </AccordionDetails>
             </Accordion>
+
+            <div className={`footer ${theme}`}>
+              <div>
+                Powered by <FontAwesomeIcon icon={faReact} />
+              </div>
+            </div>
           </div>
 
           <EndgameDialog

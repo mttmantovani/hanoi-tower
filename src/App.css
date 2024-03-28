@@ -64,3 +64,17 @@ nav {
   justify-content: right;
   align-items: baseline;
 }
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 30px;
+  width: 100%;
+  font-size: smaller;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid gray;
+  transition: background-color 0.5s linear, color 0.5s linear;
+}
