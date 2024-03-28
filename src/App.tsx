@@ -1,5 +1,9 @@
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Button,
   InputLabel,
   MenuItem,
@@ -14,6 +18,7 @@ import { FC, useContext, useEffect, useMemo, useState } from "react";
 import "./App.css";
 import { DarkModeToggle } from "./components/DarkModeToggle";
 import EndgameDialog from "./components/EndgameDialog";
+import Solution from "./components/Solution";
 import Tower from "./components/Tower";
 import { NumberOfDisksContext } from "./context/NumberOfDisksContext";
 import { ThemeContext } from "./context/ThemeContext";
@@ -222,7 +227,7 @@ const App: FC = () => {
               </div>
             </div>
 
-            <div style={{ margin: "1em 1em 2em" }}>
+            <div style={{ margin: "2em 1em 2em" }}>
               <DndContext onDragEnd={handleDragEnd}>
                 <div id="tower">
                   {towers.map((tower) => (
@@ -243,7 +248,7 @@ const App: FC = () => {
 
             <div
               style={{
-                margin: "0 2em",
+                margin: "0 2em 3em",
                 display: "flex",
                 justifyContent: "space-between",
               }}
@@ -262,6 +267,15 @@ const App: FC = () => {
                 </div>
               </div>
             </div>
+
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                Show solution
+              </AccordionSummary>
+              <AccordionDetails>
+                <Solution />
+              </AccordionDetails>
+            </Accordion>
           </div>
 
           <EndgameDialog
