@@ -7,8 +7,7 @@ export const DarkModeToggle: FC = () => {
 
   const darkModeSwitchStyle: CSSProperties = {
     position: "absolute",
-    right: 0,
-    padding: "2%",
+    right: "5px",
   };
 
   return (
@@ -16,7 +15,7 @@ export const DarkModeToggle: FC = () => {
       style={darkModeSwitchStyle}
       checked={theme !== "dark"}
       onChange={toggleTheme}
-      size={30}
+      size={"1.5rem"}
       moonColor="darkslategrey"
       sunColor="whitesmoke"
     />

@@ -29,7 +29,7 @@ const Tower: FC<PropsWithChildren<TowerProps>> = ({ id, disks }) => {
         justifyContent: "flex-start",
         alignItems: "center",
         width: "150px",
-        minHeight: "250px",
+        minHeight: "200px",
         margin: "0 10px",
         position: "relative",
         WebkitUserSelect: "none" /* Safari */,
