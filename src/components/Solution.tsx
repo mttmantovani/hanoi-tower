@@ -1,6 +1,6 @@
-import { FC, useContext } from "react";
-import { NumberOfDisksContext } from "../context/NumberOfDisksContext";
-import towerOfHanoi from "../utils/towerOfHanoi";
+import { FC, useContext } from 'react';
+import { NumberOfDisksContext } from '../context/NumberOfDisksContext';
+import towerOfHanoi from '../utils/towerOfHanoi';
 
 const Solution: FC = () => {
   const { numberOfDisks } = useContext(NumberOfDisksContext);
@@ -10,7 +10,7 @@ const Solution: FC = () => {
   return (
     <ol>
       {listOfMoves.map((move, index) => (
-        <li key={index} style={{ paddingLeft: "1em" }}>
+        <li key={index} style={{ paddingLeft: '1em' }}>
           <>
             {move[0]} &rarr; {move[5]}
           </>

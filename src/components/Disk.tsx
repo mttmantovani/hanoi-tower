@@ -1,8 +1,8 @@
-import { useDraggable } from "@dnd-kit/core";
-import { blue, red } from "@mui/material/colors";
-import { FC, useContext } from "react";
-import { NumberOfDisksContext } from "../context/NumberOfDisksContext";
-import { ThemeContext } from "../context/ThemeContext";
+import { useDraggable } from '@dnd-kit/core';
+import { blue, red } from '@mui/material/colors';
+import { FC, useContext } from 'react';
+import { NumberOfDisksContext } from '../context/NumberOfDisksContext';
+import { ThemeContext } from '../context/ThemeContext';
 
 interface DiskProps {
   id: string;
@@ -11,20 +11,18 @@ interface DiskProps {
 }
 
 const Disk: FC<DiskProps> = ({ id, size, disabled }) => {
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id,
-      disabled,
-    });
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id,
+    disabled
+  });
 
   const { theme, diskPalette } = useContext(ThemeContext);
-  const haloColor = theme === "dark" ? "#B8CC37" : "#6D723C";
+  const haloColor = theme === 'dark' ? '#B8CC37' : '#6D723C';
 
   const { numberOfDisks } = useContext(NumberOfDisksContext);
   const maxWidth = 100;
   const minWidth = 30;
-  const diskWidth =
-    ((size - 1) * (maxWidth - minWidth)) / (numberOfDisks - 1) + minWidth;
+  const diskWidth = ((size - 1) * (maxWidth - minWidth)) / (numberOfDisks - 1) + minWidth;
 
   return (
     <div
@@ -32,22 +30,18 @@ const Disk: FC<DiskProps> = ({ id, size, disabled }) => {
       id={id}
       style={{
         width: `${diskWidth}px`,
-        height: "20px",
+        height: '20px',
         backgroundColor:
-          diskPalette === "blue"
-            ? blue[(size * 100) as keyof typeof blue]
-            : red[(size * 100) as keyof typeof red],
-        borderRadius: "25px",
-        margin: "0 auto",
-        cursor: disabled ? "auto" : isDragging ? "grabbing" : "grab",
+          diskPalette === 'blue' ? blue[(size * 100) as keyof typeof blue] : red[(size * 100) as keyof typeof red],
+        borderRadius: '25px',
+        margin: '0 auto',
+        cursor: disabled ? 'auto' : isDragging ? 'grabbing' : 'grab',
         opacity: isDragging ? 0.5 : 1,
-        transform: transform
-          ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
-          : undefined,
-        transition: "opacity 0.5s ease, background-color 0.5s ease",
-        touchAction: "none",
+        transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
+        transition: 'opacity 0.5s ease, background-color 0.5s ease',
+        touchAction: 'none',
         boxShadow: disabled ? undefined : `0 0 20px 5px ${haloColor}`,
-        zIndex: 2,
+        zIndex: 2
       }}
       {...listeners}
       {...attributes}

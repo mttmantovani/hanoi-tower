@@ -17,7 +17,7 @@ export default function towerOfHanoi(
     cache.set(numberOfDisks, [
       ...towerOfHanoi(numberOfDisks - 1, source, target, auxiliary),
       `${source} -> ${target}`,
-      ...towerOfHanoi(numberOfDisks - 1, auxiliary, source, target),
+      ...towerOfHanoi(numberOfDisks - 1, auxiliary, source, target)
     ]);
   }
 

@@ -1,5 +1,5 @@
-import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
-import { FC } from "react";
+import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
+import { FC } from 'react';
 
 interface EndgameDialogProps {
   open: boolean;
@@ -7,11 +7,7 @@ interface EndgameDialogProps {
   onClick: () => void;
 }
 
-const EndgameDialog: FC<EndgameDialogProps> = ({
-  open,
-  numberOfMoves,
-  onClick,
-}) => (
+const EndgameDialog: FC<EndgameDialogProps> = ({ open, numberOfMoves, onClick }) => (
   <Dialog open={open}>
     <DialogTitle>You won in {numberOfMoves} moves!</DialogTitle>
     <DialogActions>

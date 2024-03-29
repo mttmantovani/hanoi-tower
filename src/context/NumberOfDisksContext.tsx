@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, createContext, useState } from "react";
+import { FC, PropsWithChildren, createContext, useState } from 'react';
 
 type NumberOfDisksContextType = {
   numberOfDisks: number;
@@ -7,7 +7,7 @@ type NumberOfDisksContextType = {
 
 export const NumberOfDisksContext = createContext<NumberOfDisksContextType>({
   numberOfDisks: 3,
-  updateNumberOfDisks: () => {},
+  updateNumberOfDisks: () => {}
 });
 
 export const NumberOfDisksProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -18,9 +18,7 @@ export const NumberOfDisksProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   return (
-    <NumberOfDisksContext.Provider
-      value={{ numberOfDisks, updateNumberOfDisks }}
-    >
+    <NumberOfDisksContext.Provider value={{ numberOfDisks, updateNumberOfDisks }}>
       {children}
     </NumberOfDisksContext.Provider>
   );
