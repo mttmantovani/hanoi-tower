@@ -4,6 +4,8 @@ The [Tower of Hanoi](https://en.wikipedia.org/wiki/Tower_of_Hanoi) is a mathemat
 
 This is a simple implementation of the puzzle created using React.
 
+🔗 [hanoi-tower.onrender.com](https://hanoi-tower.onrender.com)
+
 ## Tech stack
 
 - [node](https://nodejs.org/) + [TypeScript](https://www.typescriptlang.org/)
