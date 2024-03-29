@@ -9,6 +9,7 @@ import {
   Button,
   CssBaseline,
   InputLabel,
+  Link,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -190,6 +191,14 @@ const App: FC = () => {
                   <li>You can only move one disk at a time</li>
                   <li>You cannot place a disk on top of a smaller disk</li>
                 </ul>
+                <Link
+                  href="https://en.wikipedia.org/wiki/Tower_of_Hanoi"
+                  underline="hover"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  Learn more
+                </Link>
               </AccordionDetails>
             </Accordion>
 
