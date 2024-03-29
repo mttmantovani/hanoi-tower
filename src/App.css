@@ -1,6 +1,6 @@
 html,
 body {
-  font-family: "Exo 2";
+  font-family: 'Exo 2';
 
   @media (min-width: 500px) {
     font-size: large;
@@ -17,7 +17,9 @@ html {
 .theme {
   min-height: 100vh;
   width: 100%;
-  transition: background-color 0.5s linear, color 0.5s linear;
+  transition:
+    background-color 0.5s linear,
+    color 0.5s linear;
 
   display: flex;
   justify-content: center;
@@ -69,12 +71,14 @@ nav {
   position: fixed;
   bottom: 0;
   left: 0;
-  height: 30px;
+  height: 40px;
   width: 100%;
   font-size: smaller;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: baseline;
   border-top: 1px solid gray;
-  transition: background-color 0.5s linear, color 0.5s linear;
+  transition:
+    background-color 0.5s linear,
+    color 0.5s linear;
 }

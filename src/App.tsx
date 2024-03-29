@@ -1,5 +1,5 @@
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
-import { faReact } from '@fortawesome/free-brands-svg-icons';
+import { faGithub, faReact } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
@@ -263,7 +263,15 @@ const App: FC = () => {
 
             <div className={`footer ${theme}`}>
               <div>
-                Powered by <FontAwesomeIcon icon={faReact} />
+                Powered by <FontAwesomeIcon icon={faReact} /> &mdash;{' '}
+                <Link
+                  href="https://github.com/mttmantovani/hanoi-tower"
+                  underline="none"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  <FontAwesomeIcon icon={faGithub} /> @mttmantovani
+                </Link>
               </div>
             </div>
           </div>
