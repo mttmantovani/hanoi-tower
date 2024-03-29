@@ -14,7 +14,8 @@
     "lint:eslint": "eslint . --ext ts,tsx,json --report-unused-disable-directives --max-warnings 0",
     "lint:prettier": "prettier \"**/*.{json,js,ts,tsx,md}\" --ignore-path \".gitignore\" --ignore-path \"**/package-lock.json\" --check --config \".prettierrc.json\"",
     "format": "npm run lint:prettier -- --write && npm run lint:eslint -- --fix",
-    "start": "vite preview"
+    "start": "vite preview",
+    "prepare": "husky"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
@@ -37,6 +38,7 @@
     "eslint": "^8.56.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "husky": "^9.0.11",
     "typescript": "^5.2.2",
     "vite": "^5.1.4"
   }
