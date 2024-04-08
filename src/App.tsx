@@ -57,7 +57,7 @@ const App: FC = () => {
     }
   }, [towers, finalState]);
 
-  const handleDiskNumberChange = (event: SelectChangeEvent) => {
+  const onDiskNumberChange = (event: SelectChangeEvent) => {
     const updatedNumberOfDisks = parseInt(event.target.value);
 
     updateNumberOfDisks(updatedNumberOfDisks);
@@ -72,7 +72,7 @@ const App: FC = () => {
     setNumberOfMoves(0);
   };
 
-  const handleReset = () => {
+  const onReset = () => {
     setTowers([
       {
         id: 'tower-1',
@@ -85,7 +85,7 @@ const App: FC = () => {
     setNumberOfMoves(0);
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (!active || !over) {
@@ -122,7 +122,7 @@ const App: FC = () => {
     }
   };
 
-  const handleReplay = () => {
+  const onReplay = () => {
     setIsDialogOpen(false);
     setTowers([
       {
@@ -160,7 +160,7 @@ const App: FC = () => {
                 <InputLabel id="number-of-disks-select" sx={{ marginRight: '10px' }}>
                   Number of disks:{' '}
                 </InputLabel>
-                <Select label="Number of disks" value={numberOfDisks.toString()} onChange={handleDiskNumberChange}>
+                <Select label="Number of disks" value={numberOfDisks.toString()} onChange={onDiskNumberChange}>
                   <MenuItem value="3">3</MenuItem>
                   <MenuItem value="4">4</MenuItem>
                   <MenuItem value="5">5</MenuItem>
@@ -171,38 +171,24 @@ const App: FC = () => {
               </div>
             </div>
 
-            <div style={{ margin: '2em 1em 2em' }}>
-              <DndContext onDragEnd={handleDragEnd}>
+            <div id="tower-container">
+              <DndContext onDragEnd={onDragEnd}>
                 <div id="tower">
                   {towers.map((tower) => (
                     <Tower key={tower.id} id={tower.id} disks={tower.disks} />
                   ))}
                 </div>
               </DndContext>
-              <div
-                style={{
-                  height: '20px',
-                  border: 'none',
-                  borderRadius: '20px',
-                  background:
-                    'linear-gradient(90deg, rgba(74,60,38,1) 0%, rgba(139,110,53,1) 75%, rgba(255,249,227,1) 100%)'
-                }}
-              ></div>
+              <div id="tower-base"></div>
             </div>
 
-            <div
-              style={{
-                margin: '0 2em 3em',
-                display: 'flex',
-                justifyContent: 'space-between'
-              }}
-            >
-              <Button sx={{ marginRight: '1em' }} onClick={handleReset} variant="contained">
+            <div id="info-container">
+              <Button onClick={onReset} variant="contained">
                 Reset
               </Button>
               <div>
-                <div className="info">Number of moves: {numberOfMoves}</div>
-                <div className="info">Minimum number of moves: {2 ** numberOfDisks - 1}</div>
+                <div>Number of moves: {numberOfMoves}</div>
+                <div>Minimum number of moves: {2 ** numberOfDisks - 1}</div>
               </div>
             </div>
 
@@ -210,7 +196,7 @@ const App: FC = () => {
             <Footer />
           </div>
 
-          <EndgameDialog open={isDialogOpen} numberOfMoves={numberOfMoves} onClick={handleReplay} />
+          <EndgameDialog open={isDialogOpen} numberOfMoves={numberOfMoves} onClick={onReplay} />
         </div>
       </div>
     </MuiThemeProvider>

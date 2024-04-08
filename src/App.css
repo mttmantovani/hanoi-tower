@@ -44,15 +44,18 @@ nav {
 
 #settings {
   display: flex;
+  justify-content: space-evenly;
+  align-items: baseline;
 
   @media (max-width: 500px) {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
   }
+}
 
-  justify-content: space-evenly;
-  align-items: baseline;
+#tower-container {
+  margin: 2em 1em 2em;
 }
 
 #tower {
@@ -61,10 +64,27 @@ nav {
   margin-top: 2em;
 }
 
-.info {
+#tower-base {
+  height: 20px;
+  border: none;
+  border-radius: 20px;
+  background: linear-gradient(90deg, rgba(74, 60, 38, 1) 0%, rgba(139, 110, 53, 1) 75%, rgba(255, 249, 227, 1) 100%);
+}
+
+#info-container {
+  margin: 0 2em 3em;
   display: flex;
-  justify-content: right;
-  align-items: baseline;
+  justify-content: space-between;
+
+  button {
+    margin-right: 1em;
+  }
+
+  div > div {
+    display: flex;
+    justify-content: right;
+    align-items: baseline;
+  }
 }
 
 .footer {
