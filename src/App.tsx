@@ -1,31 +1,19 @@
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
-import { faGithub, faReact } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Button,
-  CssBaseline,
-  InputLabel,
-  Link,
-  MenuItem,
-  Select,
-  SelectChangeEvent
-} from '@mui/material';
+import { Button, CssBaseline, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
 import { FC, useContext, useEffect, useMemo, useState } from 'react';
 import './App.css';
 import { DarkModeToggle } from './components/DarkModeToggle';
 import EndgameDialog from './components/EndgameDialog';
+import Footer from './components/Footer';
+import Rules from './components/Rules';
 import Solution from './components/Solution';
 import Tower from './components/Tower';
 import { NumberOfDisksContext } from './context/NumberOfDisksContext';
 import { ThemeContext } from './context/ThemeContext';
 
 const App: FC = () => {
-  const { theme, diskPalette, toggleDiskPalette } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   const { numberOfDisks, updateNumberOfDisks } = useContext(NumberOfDisksContext);
 
   const muiTheme = useMemo(
@@ -147,10 +135,6 @@ const App: FC = () => {
     setNumberOfMoves(0);
   };
 
-  const onPaletteChange = (event: SelectChangeEvent) => {
-    toggleDiskPalette(event.target.value as 'blue' | 'red');
-  };
-
   return (
     <MuiThemeProvider theme={muiTheme}>
       <CssBaseline />
@@ -161,26 +145,9 @@ const App: FC = () => {
             <DarkModeToggle />
           </nav>
 
-          <div>
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>Rules</AccordionSummary>
-              <AccordionDetails>
-                Reconstruct the entire stack of disks on one of the other rods, with the following rules:
-                <ul>
-                  <li>You can only move one disk at a time</li>
-                  <li>You cannot place a disk on top of a smaller disk</li>
-                </ul>
-                <Link
-                  href="https://en.wikipedia.org/wiki/Tower_of_Hanoi"
-                  underline="hover"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  Learn more
-                </Link>
-              </AccordionDetails>
-            </Accordion>
+          <Rules />
 
+          <div>
             <div id="settings">
               <div
                 style={{
@@ -200,21 +167,6 @@ const App: FC = () => {
                   <MenuItem value="6">6</MenuItem>
                   <MenuItem value="7">7</MenuItem>
                   <MenuItem value="8">8</MenuItem>
-                </Select>
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  justifyContent: 'space-between'
-                }}
-              >
-                <InputLabel id="disk-palette-select" sx={{ marginRight: '10px' }}>
-                  Palette:{' '}
-                </InputLabel>
-                <Select label="Palette" value={diskPalette} onChange={onPaletteChange}>
-                  <MenuItem value="blue">Blue</MenuItem>
-                  <MenuItem value="red">Red</MenuItem>
                 </Select>
               </div>
             </div>
@@ -254,26 +206,8 @@ const App: FC = () => {
               </div>
             </div>
 
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>Solution</AccordionSummary>
-              <AccordionDetails>
-                <Solution />
-              </AccordionDetails>
-            </Accordion>
-
-            <div className={`footer ${theme}`}>
-              <div>
-                Powered by <FontAwesomeIcon icon={faReact} /> &mdash;{' '}
-                <Link
-                  href="https://github.com/mttmantovani/hanoi-tower"
-                  underline="none"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  <FontAwesomeIcon icon={faGithub} /> @mttmantovani
-                </Link>
-              </div>
-            </div>
+            <Solution />
+            <Footer />
           </div>
 
           <EndgameDialog open={isDialogOpen} numberOfMoves={numberOfMoves} onClick={handleReplay} />
