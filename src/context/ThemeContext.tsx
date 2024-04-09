@@ -1,5 +1,6 @@
-import { useMediaQuery } from '@mui/material';
-import { FC, PropsWithChildren, createContext, useState } from 'react';
+import { CssBaseline, useMediaQuery } from '@mui/material';
+import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
+import { FC, PropsWithChildren, createContext, useMemo, useState } from 'react';
 
 type ThemeContextType = {
   theme: 'light' | 'dark';
@@ -25,5 +26,26 @@ export const ThemeProvider: FC<PropsWithChildren> = ({ children }) => {
     localStorage.setItem('ui.theme', updatedTheme);
   };
 
-  return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>;
+  const muiTheme = useMemo(
+    () =>
+      createTheme({
+        typography: {
+          fontFamily: ['Exo 2', 'Arial', 'sans-serif'].join(',')
+        },
+        palette: {
+          mode: theme,
+          tonalOffset: 0.5
+        }
+      }),
+    [theme]
+  );
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      <MuiThemeProvider theme={muiTheme}>
+        <CssBaseline />
+        {children}
+      </MuiThemeProvider>
+    </ThemeContext.Provider>
+  );
 };
