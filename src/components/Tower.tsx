@@ -12,11 +12,28 @@ const Tower: FC<PropsWithChildren<TowerProps>> = ({ id, disks }) => {
   const { active, isOver, setNodeRef } = useDroppable({
     id
   });
-
   const { theme } = useContext(ThemeContext);
+
   const activeDiskSize = active ? parseInt(active.id.toString().split('-')[1], 10) : undefined;
 
   const haloColor = theme === 'dark' ? '#B8CC37' : '#6D723C';
+
+  const Rod: FC = () => (
+    <div
+      style={{
+        width: '15px',
+        height: '200px',
+        position: 'absolute',
+        border: 'none',
+        borderRadius: '15px 15px 0 0',
+        background: 'linear-gradient(90deg, rgba(105,83,10,1) 0%, rgba(255,242,174,1) 100%)',
+        boxShadow:
+          activeDiskSize !== undefined && isOver && !disks.includes(activeDiskSize)
+            ? `0 0 20px 5px ${haloColor}`
+            : undefined
+      }}
+    ></div>
+  );
 
   return (
     <div
@@ -34,20 +51,7 @@ const Tower: FC<PropsWithChildren<TowerProps>> = ({ id, disks }) => {
         userSelect: 'none'
       }}
     >
-      <div
-        style={{
-          width: '15px',
-          height: '200px',
-          position: 'absolute',
-          border: 'none',
-          borderRadius: '15px 15px 0 0',
-          background: 'linear-gradient(90deg, rgba(105,83,10,1) 0%, rgba(255,242,174,1) 100%)',
-          boxShadow:
-            activeDiskSize !== undefined && isOver && !disks.includes(activeDiskSize)
-              ? `0 0 20px 5px ${haloColor}`
-              : undefined
-        }}
-      ></div>
+      <Rod />
       {disks.map((size, index) => (
         <Disk key={index} id={`disk-${size}`} size={size} disabled={index !== disks.length - 1} />
       ))}
