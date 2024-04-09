@@ -1,11 +1,12 @@
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
-import { Button, CssBaseline, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Button, CssBaseline, SelectChangeEvent } from '@mui/material';
 import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
 import { FC, useContext, useEffect, useMemo, useState } from 'react';
 import './App.css';
-import { DarkModeToggle } from './components/DarkModeToggle';
+import DiskNumberInput from './components/DiskNumberInput';
 import EndgameDialog from './components/EndgameDialog';
 import Footer from './components/Footer';
+import Header from './components/Header';
 import Rules from './components/Rules';
 import Solution from './components/Solution';
 import Tower from './components/Tower';
@@ -33,55 +34,40 @@ const App: FC = () => {
   const [numberOfMoves, setNumberOfMoves] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const finalState = useMemo(() => [...Array(numberOfDisks).keys()].map((i) => i + 1).reverse(), [numberOfDisks]);
-
-  const [towers, setTowers] = useState([
+  const targetDiskOrder = useMemo(() => [...Array(numberOfDisks).keys()].map((i) => i + 1).reverse(), [numberOfDisks]);
+  const initialState = (numberOfDisks: number) => [
     {
       id: 'tower-1',
       disks: [...Array(numberOfDisks).keys()].map((i) => i + 1).reverse()
     },
     { id: 'tower-2', disks: [] },
     { id: 'tower-3', disks: [] }
-  ]);
+  ];
+  const [towers, setTowers] = useState(initialState(numberOfDisks));
 
   useEffect(() => {
     if (
       towers.find(
         (tower) =>
           (tower.id === 'tower-2' || tower.id === 'tower-3') &&
-          tower.disks.length === finalState.length &&
-          tower.disks.every((value, index) => value === finalState[index])
+          tower.disks.length === targetDiskOrder.length &&
+          tower.disks.every((value, index) => value === targetDiskOrder[index])
       )
     ) {
       setIsDialogOpen(true);
     }
-  }, [towers, finalState]);
+  }, [towers, targetDiskOrder]);
 
   const onDiskNumberChange = (event: SelectChangeEvent) => {
     const updatedNumberOfDisks = parseInt(event.target.value);
 
     updateNumberOfDisks(updatedNumberOfDisks);
-    setTowers([
-      {
-        id: 'tower-1',
-        disks: [...Array(updatedNumberOfDisks).keys()].map((i) => i + 1).reverse()
-      },
-      { id: 'tower-2', disks: [] },
-      { id: 'tower-3', disks: [] }
-    ]);
+    setTowers(initialState(updatedNumberOfDisks));
     setNumberOfMoves(0);
   };
 
   const onReset = () => {
-    setTowers([
-      {
-        id: 'tower-1',
-        disks: [...Array(numberOfDisks).keys()].map((i) => i + 1).reverse()
-      },
-      { id: 'tower-2', disks: [] },
-      { id: 'tower-3', disks: [] }
-    ]);
-
+    setTowers(initialState(numberOfDisks));
     setNumberOfMoves(0);
   };
 
@@ -124,14 +110,7 @@ const App: FC = () => {
 
   const onReplay = () => {
     setIsDialogOpen(false);
-    setTowers([
-      {
-        id: 'tower-1',
-        disks: [...Array(numberOfDisks).keys()].map((i) => i + 1).reverse()
-      },
-      { id: 'tower-2', disks: [] },
-      { id: 'tower-3', disks: [] }
-    ]);
+    setTowers(initialState(numberOfDisks));
     setNumberOfMoves(0);
   };
 
@@ -139,46 +118,22 @@ const App: FC = () => {
     <MuiThemeProvider theme={muiTheme}>
       <CssBaseline />
       <div className={`theme ${theme}`}>
-        <div style={{ minWidth: '200px', maxWidth: '520px' }}>
-          <nav>
-            <h1>Tower of Hanoi</h1>
-            <DarkModeToggle />
-          </nav>
+        <div id="main">
+          <Header title="Tower of Hanoi" />
 
           <Rules />
 
           <div>
-            <div id="settings">
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  justifyContent: 'space-between',
-                  margin: '1em'
-                }}
-              >
-                <InputLabel id="number-of-disks-select" sx={{ marginRight: '10px' }}>
-                  Number of disks:{' '}
-                </InputLabel>
-                <Select label="Number of disks" value={numberOfDisks.toString()} onChange={onDiskNumberChange}>
-                  <MenuItem value="3">3</MenuItem>
-                  <MenuItem value="4">4</MenuItem>
-                  <MenuItem value="5">5</MenuItem>
-                  <MenuItem value="6">6</MenuItem>
-                  <MenuItem value="7">7</MenuItem>
-                  <MenuItem value="8">8</MenuItem>
-                </Select>
-              </div>
-            </div>
+            <DiskNumberInput min={3} max={8} onChange={onDiskNumberChange} />
 
             <div id="tower-container">
-              <DndContext onDragEnd={onDragEnd}>
-                <div id="tower">
+              <div id="tower">
+                <DndContext onDragEnd={onDragEnd}>
                   {towers.map((tower) => (
                     <Tower key={tower.id} id={tower.id} disks={tower.disks} />
                   ))}
-                </div>
-              </DndContext>
+                </DndContext>
+              </div>
               <div id="tower-base"></div>
             </div>
 
