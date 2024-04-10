@@ -6,7 +6,7 @@ const Rules: FC = () => (
   <Accordion>
     <AccordionSummary expandIcon={<ExpandMoreIcon />}>Rules</AccordionSummary>
     <AccordionDetails>
-      Reconstruct the entire stack of disks on one of the other rods, with the following rules:
+      Reconstruct the entire stack of disks on either rod 2️⃣ or 3️⃣, with the following rules:
       <ul>
         <li>You can only move one disk at a time</li>
         <li>You cannot place a disk on top of a smaller disk</li>

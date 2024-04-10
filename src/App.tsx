@@ -1,7 +1,7 @@
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { Button, CssBaseline, SelectChangeEvent } from '@mui/material';
 import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
-import { FC, useContext, useEffect, useMemo, useState } from 'react';
+import { FC, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import './App.css';
 import DiskNumberInput from './components/DiskNumberInput';
 import EndgameDialog from './components/EndgameDialog';
@@ -35,15 +35,26 @@ const App: FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const targetDiskOrder = useMemo(() => [...Array(numberOfDisks).keys()].map((i) => i + 1).reverse(), [numberOfDisks]);
-  const initialState = (numberOfDisks: number) => [
+  const initialState = [
     {
       id: 'tower-1',
-      disks: [...Array(numberOfDisks).keys()].map((i) => i + 1).reverse()
+      disks: targetDiskOrder
     },
     { id: 'tower-2', disks: [] },
     { id: 'tower-3', disks: [] }
   ];
-  const [towers, setTowers] = useState(initialState(numberOfDisks));
+  const [towers, setTowers] = useState(initialState);
+
+  useLayoutEffect(() => {
+    setTowers([
+      {
+        id: 'tower-1',
+        disks: targetDiskOrder
+      },
+      { id: 'tower-2', disks: [] },
+      { id: 'tower-3', disks: [] }
+    ]);
+  }, [targetDiskOrder]);
 
   useEffect(() => {
     if (
@@ -59,15 +70,18 @@ const App: FC = () => {
   }, [towers, targetDiskOrder]);
 
   const onDiskNumberChange = (event: SelectChangeEvent) => {
-    const updatedNumberOfDisks = parseInt(event.target.value);
-
-    updateNumberOfDisks(updatedNumberOfDisks);
-    setTowers(initialState(updatedNumberOfDisks));
+    updateNumberOfDisks(parseInt(event.target.value));
     setNumberOfMoves(0);
   };
 
   const onReset = () => {
-    setTowers(initialState(numberOfDisks));
+    setTowers(initialState);
+    setNumberOfMoves(0);
+  };
+
+  const onDialogClose = () => {
+    setIsDialogOpen(false);
+    setTowers(initialState);
     setNumberOfMoves(0);
   };
 
@@ -108,12 +122,6 @@ const App: FC = () => {
     }
   };
 
-  const onReplay = () => {
-    setIsDialogOpen(false);
-    setTowers(initialState(numberOfDisks));
-    setNumberOfMoves(0);
-  };
-
   return (
     <MuiThemeProvider theme={muiTheme}>
       <CssBaseline />
@@ -134,7 +142,11 @@ const App: FC = () => {
                   ))}
                 </DndContext>
               </div>
-              <div id="tower-base"></div>
+              <div id="tower-base">
+                <div>1️⃣</div>
+                <div>2️⃣</div>
+                <div>3️⃣</div>
+              </div>
             </div>
 
             <div id="info-container">
@@ -151,7 +163,7 @@ const App: FC = () => {
             <Footer />
           </div>
 
-          <EndgameDialog open={isDialogOpen} numberOfMoves={numberOfMoves} onClick={onReplay} />
+          <EndgameDialog open={isDialogOpen} numberOfMoves={numberOfMoves} onClose={onDialogClose} />
         </div>
       </div>
     </MuiThemeProvider>

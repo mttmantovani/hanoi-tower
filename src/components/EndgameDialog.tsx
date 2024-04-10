@@ -4,14 +4,14 @@ import { FC } from 'react';
 interface EndgameDialogProps {
   open: boolean;
   numberOfMoves: number;
-  onClick: () => void;
+  onClose: () => void;
 }
 
-const EndgameDialog: FC<EndgameDialogProps> = ({ open, numberOfMoves, onClick }) => (
+const EndgameDialog: FC<EndgameDialogProps> = ({ open, numberOfMoves, onClose }) => (
   <Dialog open={open}>
     <DialogTitle>You won in {numberOfMoves} moves!</DialogTitle>
     <DialogActions>
-      <Button onClick={onClick}>Close</Button>
+      <Button onClick={onClose}>Close</Button>
     </DialogActions>
   </Dialog>
 );

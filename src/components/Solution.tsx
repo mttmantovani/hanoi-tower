@@ -4,6 +4,12 @@ import { FC, useContext } from 'react';
 import { NumberOfDisksContext } from '../context/NumberOfDisksContext';
 import towerOfHanoi from '../utils/towerOfHanoi';
 
+const numberToEmoji: { [key: string]: string } = {
+  '1': '1️⃣',
+  '2': '2️⃣',
+  '3': '3️⃣'
+};
+
 const Solution: FC = () => {
   const { numberOfDisks } = useContext(NumberOfDisksContext);
 
@@ -18,7 +24,7 @@ const Solution: FC = () => {
           {listOfMoves.map((move, index) => (
             <li key={index} style={{ paddingLeft: '1em' }}>
               <>
-                {move[0]} &rarr; {move[5]}
+                {numberToEmoji[move[0]]} &rarr; {numberToEmoji[move[5]]}
               </>
             </li>
           ))}
