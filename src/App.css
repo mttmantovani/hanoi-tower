@@ -81,7 +81,10 @@ nav {
 }
 
 #tower-base {
-  height: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 30px;
   border: none;
   border-radius: 20px;
   background: linear-gradient(90deg, rgba(74, 60, 38, 1) 0%, rgba(139, 110, 53, 1) 75%, rgba(255, 249, 227, 1) 100%);
