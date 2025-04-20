@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "license": "MIT",
+  "homepage": "https://apps.mantovani.dev/hanoi-tower/",
   "repository": {
     "type": "git",
     "url": "https://github.com/mttmantovani/hanoi-tower.git"
